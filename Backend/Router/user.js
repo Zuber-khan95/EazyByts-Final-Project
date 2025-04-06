@@ -14,7 +14,7 @@ router.post("/register", async (req, res, next) => {
             throw new ExpressError(404,"Missing required fields");
         }
         const registeredUser = await User.register(new User({username,email}), password);
-        
+       
         await new Promise((res, error) => {
             req.login(registeredUser, (err) => {
                 if (err) return error(err);
@@ -25,13 +25,9 @@ router.post("/register", async (req, res, next) => {
             id: registeredUser._id,
             username: registeredUser.username,
             email: registeredUser.email
-        };
-        
+        };        
         res.json({ user: safeUser, message: "Registration successful" ,state:"success"});
     } catch (err) {
-        if (err.name === 'UserExistsError') {
-            return next(new ExpressError(500,"Username already taken"));
-        }
         next(new ExpressError(500,"Registration failed"));
     }
 });

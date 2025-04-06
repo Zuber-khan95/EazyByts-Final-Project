@@ -10,6 +10,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
 import { useFlash } from '../context/FlashContext';
 axios.defaults.withCredentials=true;
+import { handleAxiosError } from '../utils/handleAxiosError';
 import './AddEvent.css'
 export default function AddEvent()
 {
@@ -37,7 +38,6 @@ return {...currData,[event.target.name]:event.target.value};
 
     let handleSubmit=async(event)=>{
         event.preventDefault();
-        console.log(formData);
         try{
         const response=await axios.post("http://localhost:5000/event/new",formData);
         if(response.data.state==="success")
@@ -64,20 +64,27 @@ return {...currData,[event.target.name]:event.target.value};
         }
         catch(err)
         {
-          
-            updateFlash({error:"Unable to  Add the Event"});
+          const errorMsg=handleAxiosError(err);
+          if(errorMsg==="Server Error occured"){
+
+            updateFlash({error:"Unable to Add the Event"});
             setTimeout(()=>{
                 updateFlash({error:""});
             },4000);
-           
-            console.error(err.response?err.response.data.message:err.message);
+        }
+        else{
+            updateFlash({error:`${errorMsg}`});
+            setTimeout(()=>{
+                updateFlash({error:""});
+            },4000);
         }
     
-    }
+    }}
 
     return (
         <div id="Form">
-            {flash?<p style={{color:"green"}}>{flash.success}</p>:<p style={{color:"red"}}>{flash.error}</p>}
+            {flash.success&&<p style={{color:"green"}}>{flash.success}</p>}
+           {flash.error&& <p style={{color:"red"}}>{flash.error}</p>}
             <h3>Add New Event here</h3>
              <form onSubmit={handleSubmit}>
                     <TextField label="Title" 

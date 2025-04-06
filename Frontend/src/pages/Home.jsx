@@ -85,13 +85,11 @@ getData();
 <Card data={event}/>
 <Button>Buy</Button> &nbsp;&nbsp;
 {
-    user?<Button onClick={()=>{handleCart(event._id);}}>Add to cart</Button>
-    :<Button variant="Outline">Need login to Add Cart</Button>
+    user&&<Button onClick={()=>{handleCart(event._id);}}>Add to cart</Button>
 }
 
 <p onClick={()=>{handleDelete(event._id);}} style={{textAlign:'right'}}> <DeleteIcon/></p>
 </div>
-
 )
     )};
     </div>
