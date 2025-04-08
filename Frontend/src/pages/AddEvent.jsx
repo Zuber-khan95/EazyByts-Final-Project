@@ -37,6 +37,7 @@ return {...currData,[event.target.name]:event.target.value};
     }
 
     let handleSubmit=async(event)=>{
+        
         event.preventDefault();
         try{
         const response=await axios.post("http://localhost:5000/event/new",formData);

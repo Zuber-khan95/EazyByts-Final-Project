@@ -8,6 +8,7 @@ import {useFlash} from '../context/FlashContext.jsx'
 import {useNavigate} from 'react-router-dom'
 import { useAuth } from '../context/AuthContext.jsx';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { handleAxiosError } from '../utils/handleAxiosError';
 export default function Home(){
     let [events,setEvents]=useState([]);
     const {flash,updateFlash}=useFlash();
@@ -37,11 +38,26 @@ let handleDelete=async(id)=>{
     }
     catch(err)
     {
-        updateFlash({error:"Unable to Delete the Event"});
+        const errorMsg=handleAxiosError(err);
+        console.log(errorMsg.status);
+    if(errorMsg.status==403){
+        updateFlash({error:"You are not the owner to delete this event"});
         setTimeout(()=>{
             updateFlash({error:""});
-        },4000);
-        console.error("Error:",err.response?err.response.data.message:"server error")
+        },4000);}
+       else if(errorMsg.status==401){
+            updateFlash({error:"You must be loggedIn to delete this event"});
+            setTimeout(()=>{
+                updateFlash({error:""});
+            },4000);}
+        
+        else{
+            updateFlash({error:`${errorMsg}`});
+            setTimeout(()=>{
+                updateFlash({error:""});
+            },4000);
+        }
+      
     }
 }
 
@@ -76,8 +92,8 @@ getData();
     return (
         <div>
   
-    {flash?<p style={{color:"green"}}>{flash.success}</p>:
-     <p style={{color:"red"}}>{flash.error}</p>}
+    {flash.success && <p style={{color:"green"}}>{flash.success}</p>}
+     {flash.error && <p style={{color:"red"}}>{flash.error}</p>}
 <div className="Outer" >
 {events.map((event)=>(
     

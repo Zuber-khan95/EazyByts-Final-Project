@@ -2,9 +2,10 @@ import express from 'express';
 import User from '../Model/user.js';
 import Event from '../Model/event.js';
 import ExpressError from '../ExpressError.js';
+import { isLoggedIn } from '../middleware.js';
 const router=express.Router();
 
-router.get("/:userId",async(req,res,next)=>{
+router.get("/:userId",isLoggedIn,async(req,res,next)=>{
   let {userId}=req.params;
     try{
 const CartEvents=await User.findById(userId).populate("Events");
@@ -20,7 +21,7 @@ res.json({CartEvents});
 
 });
 
-router.post("/:eventId/:userId",async(req,res,next)=>{
+router.post("/:eventId/:userId",isLoggedIn,async(req,res,next)=>{
     let {eventId,userId}=req.params;
     try{
 const event=await Event.findById(eventId);
@@ -43,7 +44,7 @@ res.json({state:"success", message:"Successfully Added the Event with User"});
     }
 });
 
-router.delete("/:eventId/:userId",async(req,res,next)=>{
+router.delete("/:eventId/:userId",isLoggedIn,async(req,res,next)=>{
     let {eventId,userId}=req.params;
     try{
 const event=await Event.findById(eventId);

@@ -25,7 +25,11 @@ function App() {
     <Route index element={<Home/>}/>
     <Route path="login" element={<Login/>}/>
     <Route path="signup" element={<Signup/>}/>
-    <Route path="addEvent" element={<AddEvent/>}/>
+    <Route path="addEvent" element={
+         <ProtectedRoute>
+          <AddEvent/>
+        </ProtectedRoute>
+     }/>
     <Route path="cart" element={
       <ProtectedRoute>
   <Cart/>

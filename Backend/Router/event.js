@@ -2,6 +2,7 @@ import express from 'express'
 const router=express.Router();
 import Event from '../Model/event.js'
 import ExpressError from '../ExpressError.js';
+import {isLoggedIn,isOwner} from '../middleware.js'
 
 router.get("/",async(req,res,next)=>{
     try{
@@ -15,11 +16,10 @@ res.json(data);
     }
 });
 
-router.post("/new",async(req,res,next)=>{
-    try{
-        
+router.post("/new",isLoggedIn,async(req,res,next)=>{
+    try{ 
 const newEvent=new Event(req.body);
-console.log(newEvent);
+newEvent.owner=req.user._id;
 const savedEvent = await newEvent.save();
   
 if(!savedEvent){
@@ -33,7 +33,7 @@ res.json({state:"success", message:"Successfully Added the Event"});
     }
 });
 
-router.delete("/:id",async(req,res,next)=>{
+router.delete("/:id",isLoggedIn,isOwner,async(req,res,next)=>{
     
     let {id}=req.params;
     try{

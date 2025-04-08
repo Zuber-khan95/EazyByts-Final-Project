@@ -28,7 +28,7 @@ mongoose.connect("mongodb://localhost:27017/BookMyEvent").then((res)=>{
     console.log("connected");
 }).catch((err)=>{
     console.log("Not connected");
-})
+});
 
 
 app.use((req,res,next,err)=>{

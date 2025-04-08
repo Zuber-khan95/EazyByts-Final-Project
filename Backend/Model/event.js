@@ -35,6 +35,10 @@ const eventSchema= new mongoose.Schema({
         type:Date,
         
     },
+    owner:{
+        type:mongoose.Types.ObjectId,
+        ref:"User",
+    }
 
 
 });

@@ -41,10 +41,17 @@ if(res.data.state==="success")
     catch(err)
     {
      const errorMsg=handleAxiosError(err);
-     if(errorMsg==="Server Error occured"){     
-        updateFlash({error:"Username already exist"});
+     console.log(errorMsg);
+   
+     if(errorMsg.status==500){     
+        updateFlash({error:"Server Error occurred"});
         setTimeout(() => {
             updateFlash({error:""})},4000); 
+        }
+        else if(errorMsg.status==409){
+            updateFlash({error:"This Username already exists"});        
+            setTimeout(() => {
+              updateFlash({error:""});},4000);
         }
         else{
             updateFlash({error:`${errorMsg}`});

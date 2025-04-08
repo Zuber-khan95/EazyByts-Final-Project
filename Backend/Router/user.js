@@ -13,7 +13,16 @@ router.post("/register", async (req, res, next) => {
         if (!username || !email || !password) {
             throw new ExpressError(404,"Missing required fields");
         }
+        const existingUser = await User.findOne({ username });
+
+        if (existingUser) {
+            throw new ExpressError(409, "Username already taken"); 
+        }
         const registeredUser = await User.register(new User({username,email}), password);
+        console.log(registeredUser);
+        if (!registeredUser) {
+            throw new ExpressError(500,"Registration failed");
+        }
        
         await new Promise((res, error) => {
             req.login(registeredUser, (err) => {
@@ -28,19 +37,18 @@ router.post("/register", async (req, res, next) => {
         };        
         res.json({ user: safeUser, message: "Registration successful" ,state:"success"});
     } catch (err) {
-        next(new ExpressError(500,"Registration failed"));
+        next(err);
     }
 });
 
 router.post("/login",passport.authenticate('local', {failureRedirect: './login'}),async(req,res,next)=>{
   try{
 res.json({state:"success", user:req.user});
-console.log("logged in successfully");
 }
-  catch(err)
+  catch(error)
   {
-    console.log(err);
-    next(new ExpressError(500,"Internal Server Error"));
+  
+        next(new ExpressError(500,"Internal Server Error"));
   }
 });
 

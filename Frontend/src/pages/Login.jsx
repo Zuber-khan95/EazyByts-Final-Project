@@ -39,8 +39,14 @@ login(response.data.user);
      catch(err)
      {
         const errorMsg=handleAxiosError(err);
-       if(errorMsg==="Server Error occured"){
-        updateFlash({error:"Username or password is incorrect"});
+       if(errorMsg.status==404){
+        updateFlash({error:"This user does not exist maybe Username or password is incorrect. Try again"});
+        setTimeout(()=>{
+            updateFlash({error:""});
+        },4000);
+    }
+    else if(errorMsg.status==500){
+        updateFlash({error:"Server Error occurred"});
         setTimeout(()=>{
             updateFlash({error:""});
         },4000);

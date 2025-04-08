@@ -10,6 +10,7 @@ export const AuthProvider=({children})=>{
         if(storedUser){
             setUser(JSON.parse(storedUser));
         }
+        setLoading(false);
     },[]);
     
     const login=(userData)=>{
