@@ -1,10 +1,6 @@
 import mongoose from 'mongoose'
 
 const ticketSchema=new mongoose.Schema({
-    order:{
-        type:mongoose.Types.ObjectId,
-        ref:"Order"
-    },
     event:{
         type:mongoose.Types.ObjectId,
         ref:"Event"
@@ -15,6 +11,7 @@ const ticketSchema=new mongoose.Schema({
     },
     ticketType:{
         type:String,
+        enum:["daimond","gold","silver"],
         required:true
     },
     seatNo:{

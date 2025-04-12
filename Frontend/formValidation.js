@@ -6,7 +6,8 @@ const signupSchema = Yup.object().shape({
  password:Yup.string().required('Password is required').min(6,'Password must be at least 6 characters long') .matches(
     /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]+$/,
     'Password must contain at least one letter a-z or A-Z, one number 0-9, and one special character like @ $ % etc',
-  )
+  ),
+  confirmPassword:Yup.string().oneOf([Yup.ref('password'),null]," Password must match").required("Confirm password is required"),
 });
 
 const eventSchema=Yup.object().shape({

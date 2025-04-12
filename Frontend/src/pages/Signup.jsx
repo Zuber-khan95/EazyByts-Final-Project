@@ -26,7 +26,8 @@ const { register,reset,handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
         username: '',
         email: '',
-        password: ''
+        password: '',
+        confirmPassword:''
     },
     mode:"onChange"
   });
@@ -107,6 +108,13 @@ setTimeout(() =>{
         type="password"
         focused />
         <p style={{color:'red'}}>{errors.password?.message}</p>
+        <TextField label="Confirm Password" 
+        {...register('confirmPassword')}
+        color="secondary" 
+        name='confirmPassword'
+        type="password"
+        focused />
+        <p style={{color:'red'}}>{errors.confirmPassword?.message}</p>
         
         <Button variant="contained" type='submit'>Submit</Button>
         </form>
