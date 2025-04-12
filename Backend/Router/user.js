@@ -19,7 +19,7 @@ router.post("/register", async (req, res, next) => {
             throw new ExpressError(409, "Username already taken"); 
         }
         const registeredUser = await User.register(new User({username,email}), password);
-        console.log(registeredUser);
+    
         if (!registeredUser) {
             throw new ExpressError(500,"Registration failed");
         }
@@ -35,7 +35,7 @@ router.post("/register", async (req, res, next) => {
             username: registeredUser.username,
             email: registeredUser.email
         };        
-        res.json({ user: safeUser, message: "Registration successful" ,state:"success"});
+        res.json({ user:safeUser,  message: "Registration successful" ,state:"success"});
     } catch (err) {
         next(err);
     }

@@ -14,7 +14,7 @@ const eventSchema= new mongoose.Schema({
         required:true
     },
     price:{
-        type:String,
+        type:Number,
         required:true,
     },
     category:{
@@ -34,6 +34,10 @@ const eventSchema= new mongoose.Schema({
     endDate:{
         type:Date,
         
+    },
+    availableTickets:{
+        type:Number,
+        required:true,
     },
     owner:{
         type:mongoose.Types.ObjectId,

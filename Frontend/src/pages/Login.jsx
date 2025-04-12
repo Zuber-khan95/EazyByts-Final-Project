@@ -6,27 +6,31 @@ import {useFlash} from "../context/FlashContext"
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { handleAxiosError } from '../utils/handleAxiosError';
+import Alert from 'react-bootstrap/Alert';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { loginSchema } from '../../formValidation.js';
 
 export default function Login()
 {
-let [formData, setFormData] = useState({username: '', password: ''});
+const {register,reset,handleSubmit, formState: { errors }}=useForm({
+    resolver:yupResolver(loginSchema),
+    defaultValues:{
+        username:'',
+        password:''
+    },
+})
 
 const {login,user}=useAuth();
 const {flash,updateFlash}=useFlash();
 const navigate=useNavigate();
 
-let handleChange = (e) => { setFormData((CurrData)=>{
-    return {...CurrData, [e.target.name]: e.target.value};
-}
-);}
-
-let handleSubmit = async(e) => {
-     e.preventDefault();
+let onSubmit = async(formData) => {
      try{
         const response=await axios.post("http://localhost:5000/login",formData);
         if(response.data.state==="success"){
 login(response.data.user);
-            setFormData({username: '', password: ''});
+         reset();
             updateFlash({success:"Successfully logged in"});
             setTimeout(()=>{
                 updateFlash({success:""});
@@ -62,25 +66,37 @@ login(response.data.user);
 
     return (
         <div className="Form">
-            {flash.success&&<p style={{color:"green"}}>{flash.success}</p>}
-            {flash.error&&<p style={{color:"red"}}>{flash.error}</p>}
+            {flash.success &&  <Alert variant="success" onClose={() => updateFlash({success:""})} dismissible>
+                             <Alert.Heading>Congratulation! You did it!</Alert.Heading>
+                             <p>
+                            {flash.success}
+                             </p>
+                           </Alert>}
+                           {flash.error &&  <Alert variant="danger" onClose={() => updateFlash({error:""})} dismissible>
+                             <Alert.Heading>Oh Snap! You got an error!</Alert.Heading>
+                             <p>
+                            {flash.error}
+                             </p>
+                           </Alert>}
           
         <h3>Login page</h3>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit(onSubmit)}>
         <TextField label="Username" 
         color="secondary" 
         name='username'
         type="text"
-        value={formData.username}
-        onChange={handleChange}
-        focused /><br/><br/>
+     {...register('username')}
+        focused />
+        {errors.username?.message && <p style={{color:'red'}}>{errors.username?.message}</p>}
+        <br/><br/>
         <TextField label="Password" 
         color="secondary" 
         name='password'
         type='password'
-        value={formData.password}
-        onChange={handleChange}
-        focused /><br/><br/>
+        {...register('password')}   
+        focused />
+        {errors.password?.message && <p style={{color:'red'}}>{errors.password?.message}</p>}
+        <br/><br/>
         <Button variant="contained" type='submit'>Submit</Button>
         </form>
         </div>

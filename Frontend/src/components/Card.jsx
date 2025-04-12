@@ -11,6 +11,7 @@ export default function Card({data}){
         <p><b>Category:{data.category}</b></p>
         <p><b>Price:<CurrencyRupeeIcon/>{data.price}</b></p>
         <p><b>status:{data.status}</b></p>
+        <p><b>Available Tickets: {data.availableTickets}</b></p>
         </div>
     );
 }

@@ -9,11 +9,14 @@ import {useNavigate} from 'react-router-dom'
 import { useAuth } from '../context/AuthContext.jsx';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { handleAxiosError } from '../utils/handleAxiosError';
+
+import Alert from 'react-bootstrap/Alert';
 export default function Home(){
     let [events,setEvents]=useState([]);
     const {flash,updateFlash}=useFlash();
-    const {user}=useAuth();
+    const { user }=useAuth();
     const navigate=useNavigate();
+
 let getData=async()=>{
     try{
 const response=await axios.get("http://localhost:5000/event");
@@ -39,7 +42,6 @@ let handleDelete=async(id)=>{
     catch(err)
     {
         const errorMsg=handleAxiosError(err);
-        console.log(errorMsg.status);
     if(errorMsg.status==403){
         updateFlash({error:"You are not the owner to delete this event"});
         setTimeout(()=>{
@@ -63,6 +65,9 @@ let handleDelete=async(id)=>{
 
 let handleCart=async(eventId)=>{
     try{
+        if(user)
+        {
+
         const response=await axios.post(`http://localhost:5000/cart/${eventId}/${user._id}`);
         if(response.data.state==="success"){
             updateFlash({success:"Successfully Added the Event into cart."});
@@ -73,10 +78,19 @@ let handleCart=async(eventId)=>{
             navigate("/cart");
             },4000);
         }
+        }
+        else{
+            updateFlash({error:"You must be loggedIn to add this event into cart"});
+            setTimeout(()=>{
+                updateFlash({error:""});
+            },4000);
+        }   
        
     }
     catch(err)
     {
+        const errorMsg=handleAxiosError(err);
+        console.log(errorMsg);
         updateFlash({error:"Unable to Add the Event into Cart"});
         setTimeout(()=>{
             updateFlash({error:""});
@@ -92,8 +106,19 @@ getData();
     return (
         <div>
   
-    {flash.success && <p style={{color:"green"}}>{flash.success}</p>}
-     {flash.error && <p style={{color:"red"}}>{flash.error}</p>}
+ {flash.success &&  <Alert variant="success" onClose={() => updateFlash({success:""})} dismissible>
+                  <Alert.Heading>Congratulation! You did it!</Alert.Heading>
+                  <p>
+                 {flash.success}
+                  </p>
+                </Alert>}
+                {flash.error &&  <Alert variant="danger" onClose={() => updateFlash({error:""})} dismissible>
+                  <Alert.Heading>Oh Snap! You got an error!</Alert.Heading>
+                  <p>
+                 {flash.error}
+                  </p>
+                </Alert>}
+    
 <div className="Outer" >
 {events.map((event)=>(
     
@@ -101,7 +126,7 @@ getData();
 <Card data={event}/>
 <Button>Buy</Button> &nbsp;&nbsp;
 {
-    user&&<Button onClick={()=>{handleCart(event._id);}}>Add to cart</Button>
+    user && <Button onClick={()=>{handleCart(event._id);}}>Add to cart</Button>
 }
 
 <p onClick={()=>{handleDelete(event._id);}} style={{textAlign:'right'}}> <DeleteIcon/></p>

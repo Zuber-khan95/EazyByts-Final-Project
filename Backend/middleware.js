@@ -1,4 +1,5 @@
 import ExpressError from "./ExpressError.js";
+import { eventSchema } from "./validate.js";
 
 const isLoggedIn=(req,res,Next)=>{
     if(!req.isAuthenticated()){ 
@@ -23,4 +24,18 @@ catch(err)
   
 }
 
-export {isLoggedIn,isOwner};
+const isValidEvent=async(req,res,next)=>{
+    try{
+        const eventValidate=await eventSchema.validateAsync(req.body);
+        if(eventValidate){
+            next();
+        }
+    }
+        catch(err)
+        {
+            next(new ExpressError(501,"Validation Error occured"));
+        }
+    }
+
+
+export {isLoggedIn,isOwner,isValidEvent};

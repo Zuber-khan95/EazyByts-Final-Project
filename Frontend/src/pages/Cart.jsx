@@ -7,7 +7,9 @@
  import DeleteIcon from '@mui/icons-material/Delete';
  import { useFlash } from '../context/FlashContext.jsx';
  import { handleAxiosError } from '../utils/handleAxiosError';
+ import Alert from 'react-bootstrap/Alert';
  import './Cart.css'
+ import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 
  export default function Cart(){
     const { user }=useAuth();
@@ -56,10 +58,24 @@ setTimeout(()=>{
     }
 return (
     <div>
-        {flash.success && <p style={{color:"green"}}>{flash.success}</p>}
-        {flash.error && <p style={{color:"red"}}>{flash.error}</p>}
+             {flash.success &&  <Alert variant="success" onClose={() => updateFlash({success:""})} dismissible>
+                              <Alert.Heading>Congratulation! You did it!</Alert.Heading>
+                              <p>
+                             {flash.success}
+                              </p>
+                            </Alert>}
+                            {flash.error &&  <Alert variant="danger" onClose={() => updateFlash({error:""})} dismissible>
+                              <Alert.Heading>Oh Snap! You got an error!</Alert.Heading>
+                              <p>
+                             {flash.error}
+                              </p>
+                            </Alert>}
 {
-    user?<h3 style={{textAlign:"left"}}>Welcome <u>{user.username}</u> in the Cart...</h3>:<h3>Welcome Guest in the cart..</h3>
+    user?<span style={{textAlign:"left"}}>Welcome <u>{user.username}</u> in the Cart...</span>
+    :<span>Welcome Guest in the cart..</span>
+}
+{
+    user && <div style={{textAlign: "right",marginRight:"2px" }}><AccountBalanceWalletIcon/>:{user.balance}</div>
 }
     <div className='Outer'>
         {

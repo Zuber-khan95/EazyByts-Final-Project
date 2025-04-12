@@ -1,0 +1,9 @@
+.Footer{
+    border:2px solid black;
+    height:100px;
+    width:100%;
+    background-color: rgb(180, 174, 174);
+}
+.Footer_text{
+    text-align: center;
+}

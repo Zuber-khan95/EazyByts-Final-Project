@@ -3,6 +3,7 @@ import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
+import Footer from '../components/Footer.jsx'
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Outlet } from 'react-router-dom';
@@ -63,7 +64,9 @@ if(response.data.state==="success")
         </Navbar.Collapse>
       </Container>
     </Navbar>
+
     <Outlet />  
+    {/* <Footer/> */}
     </div>
   );
 }

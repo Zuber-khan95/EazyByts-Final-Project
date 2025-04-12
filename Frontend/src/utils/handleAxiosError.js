@@ -2,7 +2,7 @@ export const handleAxiosError=(error)=>{
     if(error.response)
     {
         console.error("Server Error:",error.response.status);
-        return error.response ||"Server Error occured";
+        return error.response||"Server Error occured";
     }
     else if(error.request)
     {

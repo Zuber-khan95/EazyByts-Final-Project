@@ -15,6 +15,10 @@ const userSchema=mongoose.Schema({
     "password":{
         type:String,
     },
+    balance:{
+        type:Number,
+        default:0
+    }
   
 });
 

@@ -3,6 +3,7 @@ import User from '../Model/user.js';
 import Event from '../Model/event.js';
 import ExpressError from '../ExpressError.js';
 import { isLoggedIn } from '../middleware.js';
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 const router=express.Router();
 
 router.get("/:userId",isLoggedIn,async(req,res,next)=>{
@@ -34,7 +35,9 @@ if(!user)
 {
     throw new ExpressError(404,"User not found");
 }
-user.Events.push(event);
+if(!user.Events.includes(eventId)){
+    user.Events.push(event);
+}
 const savedUser=await user.save();
 res.json({state:"success", message:"Successfully Added the Event with User"});
     }
