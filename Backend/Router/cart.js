@@ -26,6 +26,7 @@ router.post("/:eventId/:userId",isLoggedIn,async(req,res,next)=>{
     let {eventId,userId}=req.params;
     try{
 const event=await Event.findById(eventId);
+
 if(!event)
 {
     throw new ExpressError(404,"Event not found");
@@ -33,14 +34,18 @@ if(!event)
 const user=await User.findById(userId);
 if(!user)
 {
-    throw new ExpressError(404,"User not found");
+     new ExpressError(404,"User not found");
 }
-if(!user.Events.includes(eventId)){
+
+if(!((event.owner.equals(user._id))||(user.Events.includes(eventId)))){
     user.Events.push(event);
-}
 const savedUser=await user.save();
 res.json({state:"success", message:"Successfully Added the Event with User"});
-    }
+}
+
+    next( new ExpressError(403,"You are already added this event into your cart or You are the owner."));
+}
+
     catch(err)
     {
         next(new ExpressError(500,"internal server error"));

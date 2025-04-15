@@ -9,6 +9,10 @@ const eventSchema=Joi.object({
     status:Joi.string().valid("Scheduled","Ongoing","Completed").required(),
     startDate:Joi.date().required(),
     endDate:Joi.date().required(),
+    // image:Joi.object({
+    //     url:Joi.string(),
+    //     filename:Joi.string(),
+    // }),
 });
 
 export { eventSchema };

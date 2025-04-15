@@ -5,7 +5,6 @@ import cors from 'cors';
 import session from 'express-session';
 import passport from 'passport';    
 import passportLocal from 'passport-local';
-
 app.use(cors({
     origin: 'http://localhost:5173',
     credentials: true,
@@ -19,7 +18,7 @@ import user from './Router/user.js';
 import cart from './Router/cart.js'
 import ExpressError from './ExpressError.js';
 app.use(express.json());
-const PORT= 5000;
+const PORT= process.env.PORT||8000;
 app.listen(PORT,(req,res,err)=>{
     console.log(`Server started at ${PORT}`);
 });

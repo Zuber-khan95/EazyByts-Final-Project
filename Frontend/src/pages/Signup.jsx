@@ -39,12 +39,12 @@ let onSubmit =async (formData) => {
       
 if(res.data.state==="success")
 {
-    login(res.data.user);
-updateFlash({success:"Successfully registered and logged in also"});       
+   
+updateFlash({success:"Successfully registered the user and redirecting to Login"});       
 setTimeout(() =>{
     updateFlash({success:""})},4000);
     setTimeout(() => {
-        navigate('/');
+        navigate('/login');
     }, 4000);
   reset();
 }
@@ -115,9 +115,9 @@ setTimeout(() =>{
         type="password"
         focused />
         <p style={{color:'red'}}>{errors.confirmPassword?.message}</p>
-        
         <Button variant="contained" type='submit'>Submit</Button>
         </form>
+        <p style={{color:"purple"}}><b>Already a User?<u><a style={{color:"blue"}} onClick={()=>{navigate("/login")}}>login</a></u></b></p>
         </div>
     );
 }

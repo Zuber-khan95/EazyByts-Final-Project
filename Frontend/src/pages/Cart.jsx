@@ -77,6 +77,8 @@ return (
 {
     user && <div style={{textAlign: "right",marginRight:"2px" }}><AccountBalanceWalletIcon/>:{user.balance}</div>
 }
+{events.length===0 && <div style={{textAlign:'center',marginTop:'20px',color:"purple"}}><h2>No Events Found in Cart</h2></div>}
+  {events.length>0 && <div style={{textAlign:'center',marginTop:'20px',color:"purple"}}><h2>Events in Cart </h2></div>}
     <div className='Outer'>
         {
             events.map((event)=>(

@@ -23,19 +23,8 @@ router.post("/register", async (req, res, next) => {
         if (!registeredUser) {
             throw new ExpressError(500,"Registration failed");
         }
-       
-        await new Promise((res, error) => {
-            req.login(registeredUser, (err) => {
-                if (err) return error(err);
-                res();
-            });
-        });
-        const safeUser = {
-            id: registeredUser._id,
-            username: registeredUser.username,
-            email: registeredUser.email
-        };        
-        res.json({ user:safeUser,  message: "Registration successful" ,state:"success"});
+              
+        res.json({  message: "Registration successful" ,state:"success"});
     } catch (err) {
         next(err);
     }

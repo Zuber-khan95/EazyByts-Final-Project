@@ -34,6 +34,7 @@ export default function AddEvent()
             status:"Scheduled",
             startDate:"",
             endDate:"",
+            image:"",
     },});
 
     const {flash,updateFlash}=useFlash();
@@ -90,7 +91,7 @@ export default function AddEvent()
                   </p>
                 </Alert>}
             <h3>Add New Event here</h3>
-             <form onSubmit={handleSubmit(onSubmit)}>
+             <form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
                     <TextField label="Title" 
                      {...register("title")}
                     color="secondary" 
@@ -98,7 +99,7 @@ export default function AddEvent()
                     type='text'
                     focused/>
                     <br />  <br />
-{errors.title && <p style={{color:"red"}}>{errors.title.message}</p>}
+                  {errors.title && <p style={{color:"red"}}>{errors.title.message}</p>}
                     <TextField label="Description" 
                     {...register("description")}
                     color="secondary" 
@@ -123,7 +124,7 @@ export default function AddEvent()
                     type='number'
                     focused
                     />
-                           {errors.price && <p style={{color:"red"}}>{errors.price.message}</p>}
+                    {errors.price && <p style={{color:"red"}}>{errors.price.message}</p>}
                     <br />  <br />
                        <TextField label="Available Tickets" 
                     {...register("availableTickets")}
@@ -134,6 +135,15 @@ export default function AddEvent()
                     />
                     {errors.availableTickets && <p style={{color:"red"}}>{errors.availableTickets.message}</p>}
                     <br /><br />
+                    {/* <TextField label="Event Image"
+                    {...register("image")} 
+                    color="secondary" 
+                    name="image"
+                    type="file"
+                    focused
+                    />
+                    <br /><br/>
+                    {errors.image && <p style={{color:"red"}}>{errors.image.message}</p>} */}
                     <Controller
           name="category"
           control={control}

@@ -90,12 +90,19 @@ let handleCart=async(eventId)=>{
     catch(err)
     {
         const errorMsg=handleAxiosError(err);
-        console.log(errorMsg);
-        updateFlash({error:"Unable to Add the Event into Cart"});
-        setTimeout(()=>{
-            updateFlash({error:""});
-        },4000);
-        console.error("Error:",err.response?err.response.data.message:"server error")
+        if(errorMsg.status==403){
+            updateFlash({error:"You are already added this event into your cart or You are the owner."});
+            setTimeout(()=>{
+                updateFlash({error:""});
+            },4000);}
+            else{
+                updateFlash({error:"Unable to Add the Event into Cart"});
+                setTimeout(()=>{
+                    updateFlash({error:""});
+                },4000);
+            }
+     
+       
     
 }
 }
@@ -118,7 +125,8 @@ getData();
                  {flash.error}
                   </p>
                 </Alert>}
-    
+  {events.length===0 && <div style={{textAlign:'center',marginTop:'20px',color:"purple"}}><h2>No Events Found</h2></div>}
+  {events.length>0 && <div style={{textAlign:'center',marginTop:'20px',color:"purple"}}><h2>Events </h2></div>}
 <div className="Outer" >
 {events.map((event)=>(
     
