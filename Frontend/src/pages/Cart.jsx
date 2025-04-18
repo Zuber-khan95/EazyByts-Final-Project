@@ -83,6 +83,7 @@ return (
         {
             events.map((event)=>(
                 <div key={event._id} className="inner">
+                     <img src={`${event.image}`} alt="event" ></img>
                     <Card data={event}/>
                     <Button>Buy</Button>
                     <p onClick={()=>{handleDelete(event._id);}} 

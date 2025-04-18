@@ -99,7 +99,7 @@ login(response.data.user);
         <br/><br/>
         <Button variant="contained" type='submit'>Submit</Button>
         </form>
-        <p style={{color:"purple"}}><b>New Around here?<u><a style={{color:"blue"}} onClick={()=>{navigate("/signup")}}>Signup</a></u></b></p>
+        <p style={{color:"purple"}}><b>Don't have an account ? <u><a style={{color:"blue"}} onClick={()=>{navigate("/signup")}}>SignUp</a></u></b></p>
         </div>
     );
 }

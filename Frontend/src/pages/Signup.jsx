@@ -117,7 +117,7 @@ setTimeout(() =>{
         <p style={{color:'red'}}>{errors.confirmPassword?.message}</p>
         <Button variant="contained" type='submit'>Submit</Button>
         </form>
-        <p style={{color:"purple"}}><b>Already a User?<u><a style={{color:"blue"}} onClick={()=>{navigate("/login")}}>login</a></u></b></p>
+        <p style={{color:"purple"}}><b>Already have account ? <u><a style={{color:"blue"}} onClick={()=>{navigate("/login")}}>logIn</a></u></b></p>
         </div>
     );
 }

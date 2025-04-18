@@ -2,13 +2,13 @@ import Card from '../components/Card.jsx'
 import {useState,useEffect} from 'react'
 import axios from 'axios'
 axios.defaults.withCredentials=true;
-import './Home.css'
 import Button from 'react-bootstrap/Button'
 import {useFlash} from '../context/FlashContext.jsx'
 import {useNavigate} from 'react-router-dom'
 import { useAuth } from '../context/AuthContext.jsx';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { handleAxiosError } from '../utils/handleAxiosError';
+import './Home.css'
 
 import Alert from 'react-bootstrap/Alert';
 export default function Home(){
@@ -129,8 +129,8 @@ getData();
   {events.length>0 && <div style={{textAlign:'center',marginTop:'20px',color:"purple"}}><h2>Events </h2></div>}
 <div className="Outer" >
 {events.map((event)=>(
-    
 <div className="inner" key={event._id} >
+    <img src={`${event.image}`} alt="event" ></img>
 <Card data={event}/>
 <Button>Buy</Button> &nbsp;&nbsp;
 {

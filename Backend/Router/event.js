@@ -5,49 +5,47 @@ import ExpressError from '../ExpressError.js';
 import {isLoggedIn,isOwner,isValidEvent} from '../middleware.js'
 import { eventSchema } from '../validate.js'
 import { upload } from '../cloudConfig.js'
+import {v2 as cloudinary} from 'cloudinary';
 
-// router.post("/new", (req, res, next) => {
-//     upload.single("image")(req, res, function (err) {
-//         if (err) {
-//             console.error("Multer error:", err);
-//             return res.status(400).json({ message: "Upload failed", error: err.message });
-//         }
+router.post("/new",isLoggedIn,upload.single("image"),async(req,res,next)=>{
+        try{ 
+            const validateEvent=await eventSchema.validateAsync(req.body);
+            if(!validateEvent){
+                next( new ExpressError(404,"Validation Error occured"));
+            }
+               const newEvent=new Event(req.body);
+                      if(req.file)
+                      {
+                        newEvent.image=req.file.path;
+                        newEvent.imagePublishedId=req.file.filename;
+                      }
+                        newEvent.owner=req.user._id;
+                        const savedEvent = await newEvent.save();
+            if(!savedEvent){
+                throw new ExpressError(404,"Unable to add this event");
+            }
+            res.json({state:"success", message:"Successfully Added the Event"});
+                }
+                catch(err)
+                {
+                    console.error("Error:", err); 
+                    next(new ExpressError(500,"internal server error")); 
+                }
 
-//         if (!req.file) {
-//             return res.status(400).json({ message: "No file uploaded" });
-//         }
+    });
 
-//         console.log("Upload success:", req.file.path);
-//         res.status(200).json({ imageUrl: req.file.path });
-//     });
-// });
-
-router.post("/new",isLoggedIn,async(req,res,next)=>{
-    try{ 
-            const newEvent=new Event(req.body);
-            newEvent.owner=req.user._id;
-            const savedEvent = await newEvent.save();
-if(!savedEvent){
-    throw new ExpressError(404,"Unable to add this event");
-}
-res.json({state:"success", message:"Successfully Added the Event"});
-    }
-    catch(err)
-    {
-        if (err.isJoi) {
-            return next(new ExpressError(400, `Validation Error: ${err.message}`));
-          }
-        next(new ExpressError(500,"internal server error")); 
-    }
-});
 router.get("/",async(req,res,next)=>{
     try{
-const data= await Event.find({});
+const data= await Event.find({}).populate("owner");
 
+if(!data){
+    throw ExpressError(404,"Unable to fetch events");
+}
 res.json(data);
     }
     catch(err)
     {
+        console.error("Error:", err); 
         next(new ExpressError(500,"internal server error"));
     }
 });
@@ -58,10 +56,18 @@ router.delete("/:id",isLoggedIn,isOwner,async(req,res,next)=>{
     
     let {id}=req.params;
     try{
-       
-const deletedEvent=await Event.findByIdAndDelete(id);
-
-
+        const event=await Event.findById(id);
+        if(!event){
+            throw new ExpressError(404,"Unable to find this event");
+        }
+        let imagePublicId=event.imagePublishedId;
+    if(imagePublicId){
+        const result = await cloudinary.uploader.destroy(imagePublicId);  
+        if (result.result !== 'ok' && result.result !== 'not found') {
+            return next(new ExpressError(500, "Unexpected error deleting image from Cloudinary"));
+        }
+    } 
+      const deletedEvent=await Event.findByIdAndDelete(id);
 if(!deletedEvent){
     throw ExpressError(404,"Unable to delete this event");
 }
@@ -69,6 +75,7 @@ res.json({state:"success", message:"Successfully Deleted the Event"});
     }
     catch(err)
     {
+        console.error("Error:", err); 
         next(new ExpressError(500,"internal server error"));
     }
 });

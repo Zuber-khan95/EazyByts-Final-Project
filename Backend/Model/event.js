@@ -45,6 +45,10 @@ const eventSchema= new mongoose.Schema({
     },
     image:{
         type:String,
+        default:"https://elements-resized.envatousercontent.com/envato-dam-assets-production/EVA/TRX/4d/94/1c/1a/84/v1_E10/E108AQ0F.jpg?w=800&cf_fit=scale-down&mark-alpha=18&mark=https%3A%2F%2Felements-assets.envato.com%2Fstatic%2Fwatermark4.png&q=85&format=auto&s=7f65a117bb8bb877e1dc421a46bd79fd579d48474ee45780a0dbbf9e0415f466",
+    },
+    imagePublishedId:{
+        type:String,
     },
 
 });

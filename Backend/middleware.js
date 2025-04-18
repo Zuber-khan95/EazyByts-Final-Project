@@ -18,14 +18,17 @@ try{
    return Next(new ExpressError(403,"You are not authorized to do this"));
 }
 catch(err)
-{
+    {
+        console.error("Error:", err);
     Next(err);
 }
   
 }
 
 const isValidEvent=async(req,res,next)=>{
+
     try{
+    
         const eventValidate=await eventSchema.validateAsync(req.body);
         if(eventValidate){
             next();
@@ -33,6 +36,7 @@ const isValidEvent=async(req,res,next)=>{
     }
         catch(err)
         {
+            console.error("Error:", err); 
             next(new ExpressError(501,"Validation Error occured"));
         }
     }

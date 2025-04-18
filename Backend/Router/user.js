@@ -26,6 +26,7 @@ router.post("/register", async (req, res, next) => {
               
         res.json({  message: "Registration successful" ,state:"success"});
     } catch (err) {
+        console.error("Error:", err); 
         next(err);
     }
 });
@@ -36,7 +37,7 @@ res.json({state:"success", user:req.user});
 }
   catch(error)
   {
-  
+    console.error("Error:", err); 
         next(new ExpressError(500,"Internal Server Error"));
   }
 });
@@ -44,6 +45,7 @@ res.json({state:"success", user:req.user});
 router.post("/logout",(req,res,next)=>{
     req.session.destroy((err)=>{
         if(err){
+            console.error("Error:", err); 
             next(new ExpressError(404,"Unable to logged out"));
         }
     });

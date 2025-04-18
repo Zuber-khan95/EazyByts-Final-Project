@@ -34,7 +34,8 @@ export default function AddEvent()
             status:"Scheduled",
             startDate:"",
             endDate:"",
-            image:"",
+            image:""
+            
     },});
 
     const {flash,updateFlash}=useFlash();
@@ -42,8 +43,30 @@ export default function AddEvent()
     const navigate=useNavigate();
 
     let onSubmit=async(formData)=>{
-        try{
-        const response=await axios.post("http://localhost:5000/event/new",formData);
+          const fd = new FormData();
+
+          // Append all the values from the form
+          fd.append("title", formData.title);
+          fd.append("description", formData.description);
+          fd.append("location", formData.location);
+          fd.append("price", formData.price);
+          fd.append("availableTickets", formData.availableTickets);
+          fd.append("category", formData.category);
+          fd.append("status", formData.status);
+          fd.append("startDate", formData.startDate);
+          fd.append("endDate", formData.endDate);
+      
+          // File input is a FileList, so get the first file
+          if (formData.image && formData.image[0]) {
+            fd.append("image", formData.image[0]);
+          } 
+          try{
+
+          const response = await axios.post("http://localhost:5000/event/new",fd, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            }
+          });
         if(response.data.state==="success")
         {
             updateFlash({success:"Successfully Added the Event"});
@@ -74,7 +97,8 @@ export default function AddEvent()
             },4000);
         }
     
-    }}
+    }
+  }
 
     return (
         <div id="Form">
@@ -135,15 +159,16 @@ export default function AddEvent()
                     />
                     {errors.availableTickets && <p style={{color:"red"}}>{errors.availableTickets.message}</p>}
                     <br /><br />
-                    {/* <TextField label="Event Image"
+                    <TextField label="Event Image"
                     {...register("image")} 
-                    color="secondary" 
+                    color="secondary"
                     name="image"
                     type="file"
+                    inputProps={{ accept: "image/*" }} 
                     focused
                     />
                     <br /><br/>
-                    {errors.image && <p style={{color:"red"}}>{errors.image.message}</p>} */}
+                    {errors.image && <p style={{color:"red"}}>{errors.image.message}</p>}
                     <Controller
           name="category"
           control={control}

@@ -17,6 +17,7 @@ res.json({CartEvents});
     }
     catch(err)
     {
+        console.error("Error:", err); 
         next(new ExpressError(500,"internal server error"));
     }
 
@@ -48,6 +49,7 @@ res.json({state:"success", message:"Successfully Added the Event with User"});
 
     catch(err)
     {
+        console.error("Error:", err); 
         next(new ExpressError(500,"internal server error"));
     }
 });
@@ -71,6 +73,7 @@ res.json({state:"success", message:"Successfully delete the Event."});
     }
     catch(err)
     {
+        console.error("Error:", err); 
         next(new ExpressError(500,"internal server error"));
     }
 });

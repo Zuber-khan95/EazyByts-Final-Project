@@ -12,6 +12,8 @@ export default function Card({data}){
         <p><b>Price:<CurrencyRupeeIcon/>{data.price}</b></p>
         <p><b>status:{data.status}</b></p>
         <p><b>Available Tickets: {data.availableTickets}</b></p>
+        <p><b>Owner: {data.owner.username}</b></p>
+
         </div>
     );
 }
