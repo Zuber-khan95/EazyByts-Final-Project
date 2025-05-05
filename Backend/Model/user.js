@@ -12,6 +12,13 @@ const userSchema=mongoose.Schema({
     "Events":[{ type: mongoose.Schema.Types.ObjectId,
         ref: 'Event' 
     }],
+    purchaseTickets:[{ type: mongoose.Schema.Types.ObjectId,
+        ref: 'Ticket' 
+    }],
+    getOrders:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Ticket'
+    }],
     "password":{
         type:String,
     },

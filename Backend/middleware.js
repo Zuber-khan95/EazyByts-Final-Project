@@ -1,5 +1,6 @@
 import ExpressError from "./ExpressError.js";
 import { eventSchema } from "./validate.js";
+import Event from "./Model/event.js";
 
 const isLoggedIn=(req,res,Next)=>{
     if(!req.isAuthenticated()){ 

@@ -14,13 +14,21 @@ const eventSchema= new mongoose.Schema({
         required:true
     },
     price:{
+        diamond:{
         type:Number,
-        required:true,
+    },
+        gold:{
+            type:Number,
+        },
+        silver:{
+            type:Number,
+            
+        },
     },
     category:{
         type:String,
         enum:['Music','Sports','Others'],
-        default:'Other'},
+        default:'Others'},
     
         status:{
             type:String,
@@ -29,15 +37,41 @@ const eventSchema= new mongoose.Schema({
         },
     startDate:{
         type:Date,
+        required:true,
         
     },
     endDate:{
         type:Date,
+        required:true,
         
     },
     availableTickets:{
-        type:Number,
-        required:true,
+        diamond:{
+            type:Number,
+            
+        },
+        gold:{
+            type:Number,
+            
+        },
+        silver:{
+            type:Number,
+            
+        },
+    },
+    bookedSeats:{
+        diamond:{
+          type:  [Number],
+          default:[],
+        },
+        gold:{
+            type:  [Number],
+            default:[],
+        },
+        silver:{
+            type:  [Number],
+            default:[],
+        },
     },
     owner:{
         type:mongoose.Types.ObjectId,
@@ -53,4 +87,5 @@ const eventSchema= new mongoose.Schema({
 
 });
 
-export default Event=mongoose.model('Event',eventSchema);
+const Event=mongoose.model("Event",eventSchema);
+export default Event;

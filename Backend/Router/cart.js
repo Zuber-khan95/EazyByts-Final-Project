@@ -9,7 +9,11 @@ const router=express.Router();
 router.get("/:userId",isLoggedIn,async(req,res,next)=>{
   let {userId}=req.params;
     try{
-const CartEvents=await User.findById(userId).populate("Events");
+const CartEvents=await User.findById(userId).populate("Events").populate({path: 'purchaseTickets',
+    populate: [
+      { path: 'event', select: 'title location' }, 
+      { path: 'user', select: 'username' } ,
+    ]}).populate("getOrders").exec();
 if(!CartEvents){
     throw new ExpressError(404,"User's Event not found");
 }

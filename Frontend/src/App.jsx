@@ -12,7 +12,7 @@ import './App.css'
 import { AuthProvider } from './context/AuthContext.jsx'
 import { FlashProvider } from './context/FlashContext.jsx'
 import ProtectedRoute from './context/ProtectedRoute.jsx'
-
+import TicketForm from './pages/TicketForm.jsx'
 function App() {
 
   return (
@@ -35,6 +35,10 @@ function App() {
   <Cart/>
       </ProtectedRoute>
     }/>
+    <Route path="ticketForm/:id" element={
+      <ProtectedRoute>
+        <TicketForm/>
+        </ProtectedRoute>}/>
     </Route>
   </Routes>
   </BrowserRouter>

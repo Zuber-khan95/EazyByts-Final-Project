@@ -110,6 +110,35 @@ useEffect(()=>{
 getData();
 },[events]);
 
+let handleBuy=async(id)=>{
+    try{
+        const response=await axios.get(`http://localhost:5000/event/${id}`);
+if(user){
+  if(user._id!==response.data.event.owner){
+                navigate(`/ticketForm/${id}`);
+            }
+            else{
+                updateFlash({error:"You are owner of this event so can't buy own event"});
+                setTimeout(()=>{
+                    updateFlash({error:""});
+                },4000);
+            }}
+            else{
+                updateFlash({error:"You must be loggedIn to buy this event"});
+                setTimeout(()=>{
+                    updateFlash({error:""});
+                },4000);
+            }
+    }
+    catch(err){
+        const errorMsg=handleAxiosError(err);
+        console.log(errorMsg);
+
+       
+    }
+   
+}
+
     return (
         <div>
   
@@ -132,7 +161,7 @@ getData();
 <div className="inner" key={event._id} >
     <img src={`${event.image}`} alt="event" ></img>
 <Card data={event}/>
-<Button>Buy</Button> &nbsp;&nbsp;
+<Button onClick={()=>{handleBuy(event._id);}}>Buy</Button> &nbsp;&nbsp;
 {
     user && <Button onClick={()=>{handleCart(event._id);}}>Add to cart</Button>
 }

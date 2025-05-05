@@ -11,7 +11,7 @@ import axios from 'axios'
 import { useAuth } from '../context/AuthContext.jsx';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import {useFlash} from '../context/FlashContext.jsx'
-
+import "./Layout.css"
 
 export default function Layout() {
   const { user, logout }=useAuth();
@@ -41,8 +41,8 @@ if(response.data.state==="success")
   }
   
   return (
-    <div>
-    <Navbar expand="lg" className="bg-body-tertiary">
+    <div className="d-flex flex-column min-vh-100">
+    <Navbar expand="lg" className="bg-body-tertiary navbar">
       <Container fluid>
         <Navbar.Brand href="/">BookMyEvent</Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
@@ -65,8 +65,11 @@ if(response.data.state==="success")
       </Container>
     </Navbar>
 
-    <Outlet />  
-    {/* <Footer/> */}
+    <main className="flex-grow-1">
+        <Outlet />
+      </main> 
+      <br/>
+    <Footer/>
     </div>
   );
 }

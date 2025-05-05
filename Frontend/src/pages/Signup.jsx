@@ -101,7 +101,7 @@ setTimeout(() =>{
         name='email'
         focused />
         <p style={{color:'red'}}>{errors.email?.message}</p>
-        <TextField label="Password" 
+        <TextField label="Create Password" 
         {...register('password')}
         color="secondary" 
         name='password'

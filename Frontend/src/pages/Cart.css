@@ -11,8 +11,19 @@
     border:2px solid blueviolet;
     color:rgb(158, 86, 95);
     border-radius:10px;
-    width:350px;
-    height:620px;
+    width:400px;
+    height:690px;
+    margin-left:20px;
+    margin-top:20px;
+    padding:10px;
+}
+
+.ticket_background{
+    border:2px solid blueviolet ;
+    color:rgb(158, 86, 95);
+    border-radius:10px;
+    width:400px !important;
+    height:330px !important;
     margin-left:20px;
     margin-top:20px;
     padding:10px;

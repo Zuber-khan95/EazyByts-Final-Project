@@ -7,7 +7,7 @@ export const AuthProvider=({children})=>{
     const [ loading , setLoading ]=useState(true);
     useEffect(()=>{
         const storedUser=localStorage.getItem('user');
-        if(storedUser){
+        if(storedUser && storedUser!=="undefined"){
             const parsedUser=JSON.parse(storedUser);
             setUser(parsedUser);
         }
@@ -19,6 +19,11 @@ export const AuthProvider=({children})=>{
         localStorage.setItem('user',JSON.stringify(userData));
         setLoading(false);
     };
+    
+    const updateUser=(userData)=>{
+        setUser(userData);
+        localStorage.setItem('user',JSON.stringify(userData));
+    };
 
     const logout=()=>{
         setUser(null);
@@ -26,7 +31,7 @@ export const AuthProvider=({children})=>{
         setLoading(true);
     }
     return (
-        <AuthContext.Provider value={{ user , login , logout ,loading}}>
+        <AuthContext.Provider value={{ user ,updateUser, login , logout ,loading}}>
             {children}
         </AuthContext.Provider>
     );

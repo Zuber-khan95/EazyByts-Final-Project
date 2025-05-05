@@ -28,9 +28,16 @@ export default function AddEvent()
             title:"",
             description:"",
             location:"",
-            price:"",
-            availableTickets:"",
-            category:"Music",
+            price:{
+                diamond:"",   
+                gold:"",
+                silver:"",},
+            availableTickets:{
+              diamond:"",   
+              gold:"",
+              silver:"",
+            },
+            category:"Others",
             status:"Scheduled",
             startDate:"",
             endDate:"",
@@ -41,7 +48,6 @@ export default function AddEvent()
     const {flash,updateFlash}=useFlash();
 
     const navigate=useNavigate();
-
     let onSubmit=async(formData)=>{
           const fd = new FormData();
 
@@ -49,14 +55,13 @@ export default function AddEvent()
           fd.append("title", formData.title);
           fd.append("description", formData.description);
           fd.append("location", formData.location);
-          fd.append("price", formData.price);
-          fd.append("availableTickets", formData.availableTickets);
+          fd.append("price", JSON.stringify(formData.price));
+          fd.append("availableTickets", JSON.stringify(formData.availableTickets));
           fd.append("category", formData.category);
           fd.append("status", formData.status);
           fd.append("startDate", formData.startDate);
           fd.append("endDate", formData.endDate);
-      
-          // File input is a FileList, so get the first file
+          
           if (formData.image && formData.image[0]) {
             fd.append("image", formData.image[0]);
           } 
@@ -99,7 +104,6 @@ export default function AddEvent()
     
     }
   }
-
     return (
         <div id="Form">
              {flash.success &&  <Alert variant="success" onClose={() => updateFlash({success:""})} dismissible>
@@ -121,44 +125,92 @@ export default function AddEvent()
                     color="secondary" 
                     name='title'
                     type='text'
-                    focused/>
+                    focused fullWidth
+                    error={!!errors?.title}
+                    helperText={errors?.title?.message}
+                    margin="normal"/>
                     <br />  <br />
-                  {errors.title && <p style={{color:"red"}}>{errors.title.message}</p>}
                     <TextField label="Description" 
                     {...register("description")}
                     color="secondary" 
                     name='description'
                      type='text'
-                    focused/>
+                    focused
+                    fullWidth
+                    error={!!errors?.description}
+                    helperText={errors?.description?.message}/>
                     <br />  <br />
-                  {errors.description && <p style={{color:"red"}}>{errors.description.message}</p>}
                   <TextField label="Location" 
                    {...register("location")}
                     color="secondary" 
                     name='location'
                     type='text'
                     focused
-                    />
+                    fullWidth
+                    error={!!errors?.location}
+                    helperText={errors?.location?.message}
+                 />
                     <br />  <br />
-                    {errors.location && <p style={{color:"red"}}>{errors.location.message}</p>}
-                    <TextField label="Price"
-                     {...register("price")} 
+             <TextField label="Available Diamond Tickets" 
+                    {...register("availableTickets.diamond")}
                     color="secondary" 
-                    name='price'
+                    name='availableTickets.diamond'
                     type='number'
                     focused
+                    error={!!errors?.availableTickets?.diamond}
+                    helperText={errors?.availableTickets?.diamond?.message}
                     />
-                    {errors.price && <p style={{color:"red"}}>{errors.price.message}</p>}
-                    <br />  <br />
-                       <TextField label="Available Tickets" 
-                    {...register("availableTickets")}
+                    &nbsp; &nbsp; &nbsp; &nbsp;
+                    <TextField label="Diamond Ticket Price"
+                     {...register("price.diamond")} 
                     color="secondary" 
-                    name='availableTickets'
+                    name='price.diamond'
                     type='number'
                     focused
+                    error={!!errors?.price?.diamond}
+                    helperText={errors?.price?.diamond?.message}
                     />
-                    {errors.availableTickets && <p style={{color:"red"}}>{errors.availableTickets.message}</p>}
-                    <br /><br />
+                    <br />  <br />
+                    <TextField label="Available Gold Tickets" 
+                    {...register("availableTickets.gold")}
+                    color="secondary" 
+                    name='availableTickets.gold'
+                    type='number'
+                    focused
+                    error={!!errors?.availableTickets?.gold}
+                    helperText={errors?.availableTickets?.gold?.message}
+                    />
+                    &nbsp; &nbsp; &nbsp; &nbsp;
+                    <TextField label="Gold Ticket Price"
+                     {...register("price.gold")} 
+                    color="secondary" 
+                    name='price.gold'
+                    type='number'
+                    focused
+                    error={!!errors?.price?.gold}
+                    helperText={errors?.price?.gold?.message}
+                    />
+                    <br />  <br />
+                    <TextField label="Available Silver Tickets" 
+                    {...register("availableTickets.silver")}
+                    color="secondary" 
+                    name='availableTickets.silver'
+                    type='number'
+                    focused
+                    error={!!errors?.availableTickets?.silver}
+                    helperText={errors?.availableTickets?.silver?.message}
+                    /> 
+                    &nbsp; &nbsp; &nbsp; &nbsp;
+                    <TextField label="Silver Ticket Price"
+                     {...register("price.silver")} 
+                    color="secondary" 
+                    name='price.silver'
+                    type='number'
+                    focused
+                    error={!!errors?.price?.silver}
+                    helperText={errors?.price?.silver?.message}
+                    />
+                    <br />  <br />
                     <TextField label="Event Image"
                     {...register("image")} 
                     color="secondary"
@@ -166,9 +218,11 @@ export default function AddEvent()
                     type="file"
                     inputProps={{ accept: "image/*" }} 
                     focused
+                    fullWidth
+                    error={!!errors?.image}
+                    helperText={errors?.image?.message}
                     />
                     <br /><br/>
-                    {errors.image && <p style={{color:"red"}}>{errors.image.message}</p>}
                     <Controller
           name="category"
           control={control}
@@ -184,7 +238,7 @@ export default function AddEvent()
   </RadioGroup>
 </FormControl>)}/>
 {errors.category && <p style={{color:"red"}}>{errors.category.message}</p>}
-<br /><br/>
+&nbsp; &nbsp; &nbsp; &nbsp;
 <Controller
           name="status"
           control={control}
@@ -208,6 +262,9 @@ export default function AddEvent()
                     name='startDate'
                     type='date'
                     focused 
+                    fullWidth
+                    error={!!errors?.startDate}
+                    helperText={errors?.startDate?.message}
                     /><br/><br/>
                     {errors.startDate && <p style={{color:"red"}}>{errors.startDate.message}</p>}
                     <TextField label="End Date" 
@@ -216,8 +273,10 @@ export default function AddEvent()
                     name='endDate'
                     type='date'
                     focused 
+                    fullWidth
+                    error={!!errors?.endDate}
+                    helperText={errors?.endDate?.message}
                     /><br/><br/>
-                     {errors.endDate && <p style={{color:"red"}}>{errors.endDate.message}</p>}
                     <Button variant="contained" type='submit'>Submit</Button>
                     </form>
         </div>

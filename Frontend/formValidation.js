@@ -20,10 +20,20 @@ const eventSchema=Yup.object().shape({
     location:Yup.string().min(3,"Location must have at least 3 characters.")
     .max(20,"Location must have max 20 characters.")
     .required("Location is required"),
-    price:Yup.number().min(0,"Price must be more than 0.")
+    price:Yup.object().shape({
+      diamond:Yup.number().min(0,"Price must be more than 0.") .typeError("Price must be a number")
     .required("Price is required"),
-    availableTickets:Yup.number().min(1,"available Tickets must be more than 0.")
-    .required("available tickets is required"),
+    gold:Yup.number().min(0,"Price must be more than 0.") .typeError("Price must be a number")
+    .required("Price is required"),   
+    silver:Yup.number().min(0,"Price must be more than 0.") .typeError("Price must be a number")
+    .required("Price is required"),}),
+    availableTickets:Yup.object().shape({
+     diamond: Yup.number().min(1," Tickets must be more than 0.") .typeError("Price must be a number")
+    .required(" tickets is required"),
+     gold: Yup.number().min(1," Tickets must be more than 0.") .typeError("Price must be a number")
+    .required(" tickets is required"),
+     silver: Yup.number().min(1," Tickets must be more than 0.") .typeError("Price must be a number")
+    .required(" tickets is required"),}),
     category:Yup.string().required("pls choose any one from above in options."),
     status:Yup.string().required("pls choose any one from above in options."),
     startDate:Yup.date().required("Starting date is required"),
@@ -37,6 +47,40 @@ const loginSchema=Yup.object().shape({
     /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]+$/,
     'Password must contain at least one letter a-z or A-Z, one number 0-9, and one special character like @ $ % etc',
   )
-})
+});
 
-export {signupSchema,eventSchema,loginSchema}; 
+const ticketSchema = Yup.object().shape({
+  event: Yup.string()
+    .required("Event name is required"),
+  
+  user: Yup.string()
+    .required("User is required"),
+  
+  quantity: Yup.number()
+    .typeError("Quantity must be a number")
+    .min(1, "Quantity must be more than 0")
+    .required("Quantity is required"),
+  
+  price: Yup.number()
+    .typeError("Price must be a number")
+    .min(0, "Price must be more than 0")
+    .required("Price is required"),
+  
+  ticketType: Yup.string()
+    .required("Ticket type is required"),
+  
+    ticketDate: Yup.date()
+    .required("Date is required")
+    .min(
+      new Date(new Date().setHours(0, 0, 0, 0)),
+      "Event cannot be booked in the past"
+    )
+  ,
+  
+  seatNo: Yup.array()
+    .of(Yup.string().required("Seat number cannot be empty")) 
+    .min(1, "Seat No cannot be less than 1")
+    .required("Seat Number is required")
+});
+
+export {signupSchema,eventSchema,loginSchema,ticketSchema}; 

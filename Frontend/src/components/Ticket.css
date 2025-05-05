@@ -1,0 +1,71 @@
+.ticket {
+    width: 400px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    border-left: 10px solid #d4af37;
+    margin-bottom: 20px;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  
+  .ticket-header {
+    padding: 20px;
+    background-color: #222;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .ticket-body {
+    padding: 20px;
+  }
+  
+  .ticket-row {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .label {
+    font-weight: bold;
+    color: #555;
+  }
+  
+  .value {
+    color: #222;
+  }
+  
+  .status_active {
+    color: green;
+    font-weight: bold;
+  }
+  
+  .status_cancelled {
+    color: red;
+    font-weight: bold;
+  }
+  
+  .status_expired {
+    color: #58bcd3 !important;
+    font-weight: bold;
+  }
+  
+  .ticket_type_diamond {
+  color: #b9f2ff !important;
+  font-weight: bold;
+  }
+  
+  .ticket_type_gold {
+    color: #ffd700 !important;
+    font-weight: bold;
+  }
+  
+  .ticket_type_silver {
+     color: #c0c0c0 !important;
+     font-weight: bold;
+  }
+
+
+  
