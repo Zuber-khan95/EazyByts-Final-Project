@@ -12,10 +12,11 @@
  import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
  import { useNavigate } from 'react-router-dom';
  import Ticket from '../components/Ticket.jsx';
+ import OrderTable from '../components/OrderTable.jsx';
 
  export default function Cart(){
     const navigate=useNavigate();
-    const { user }=useAuth();
+    const { user,updateUser }=useAuth();
     const [events,setEvents]=useState([]);
     const [orders,setOrders]=useState([]);
     const [tickets,setTickets]=useState([]);
@@ -25,7 +26,7 @@
         try{
 const response=await axios.get(`http://localhost:5000/cart/${user._id}`);
 setEvents(response.data.CartEvents.Events);
-setOrders(response.data.CartEvents.getOrders);
+setOrders(response.data.CartEvents.ordersPlaced);
 setTickets(response.data.CartEvents.purchaseTickets);
         }
         catch(err)
@@ -41,9 +42,10 @@ setTickets(response.data.CartEvents.purchaseTickets);
         }  
     },[user]);
 
-    let handleDelete=async(eventId)=>{
+    let handleDeleteEventFromCart=async(eventId)=>{
         try{
 const response=await axios.delete(`http://localhost:5000/cart/${eventId}/${user._id}`);
+updateUser(response.data.user);
 if(response.data.state==='success'){
 updateFlash({success:"Successfully Deleted the Event From Cart"});
 setTimeout(()=>{
@@ -65,7 +67,7 @@ setTimeout(()=>{
     }
 
 
-    let handleBuy=async(id)=>{
+    let handleBuyTicket=async(id)=>{
         try{
             const response=await axios.get(`http://localhost:5000/event/${id}`);
     if(user){
@@ -87,12 +89,50 @@ setTimeout(()=>{
         }
         catch(err){
             const errorMsg=handleAxiosError(err);
-            console.log(errorMsg);
-    
-           
-        }
-       
+            console.log(errorMsg); 
+        }  
     }
+
+    let handleCancelTicket=async(ticketId)=>{
+        try{
+const response=await axios.patch(`http://localhost:5000/ticket/${ticketId}/${user._id}`);
+updateUser(response.data.user);
+if(response.data.state==="success")
+{
+    updateFlash({success:"Successfully cancelled the ticket"});
+    setTimeout(()=>{
+        updateFlash({success:""});
+    },4000);
+}
+        }
+        catch(err)
+        {
+            const errorMsg=handleAxiosError(err);
+            updateFlash({error:errorMsg.statusText});
+            setTimeout(()=>{updateFlash({error:""});
+            },4000);
+        }
+    };
+
+    let handleDeleteTicket=async(ticketId)=>{
+    try{
+const response=await axios.delete(`http://localhost:5000/ticket/${ticketId}/${user._id}`);
+updateUser(response.data.user);
+
+if(response.data.state==="success")
+{
+    updateFlash({success:"Successfully delete the ticket."});
+    setTimeout(()=>{
+        updateFlash({success:""});
+    },4000);
+}
+    }
+    catch(err){
+const errorMsg=handleAxiosError(err);
+console.log(errorMsg);
+    }
+    };
+    console.log(orders);
 return (
     <div>
              {flash.success &&  <Alert variant="success" onClose={() => updateFlash({success:""})} dismissible>
@@ -122,8 +162,8 @@ return (
                 <div key={event._id} className="inner">
                      <img src={`${event.image}`} alt="event" ></img>
                     <Card data={event}/>
-                    <Button onClick={()=>{handleBuy(event._id)}}>Buy</Button>
-                    <Button variant='danger' onClick={()=>{handleDelete(event._id);}} style={{marginLeft:"5px"}}>Remove</Button>
+                    <Button onClick={()=>{handleBuyTicket(event._id)}}>Buy</Button>
+                    <Button variant='danger' onClick={()=>{handleDeleteEventFromCart(event._id);}} style={{marginLeft:"5px"}}>Remove</Button>
                     </div>
             ))
         } ;
@@ -136,29 +176,19 @@ return (
         {
          tickets.map((ticket)=>(
             <div key={ticket._id} className="ticket_background">
-                {/* <p>{ticket.ticketType}</p> */}
                 <Ticket data={ticket}/>
-                {/* <Card data={ticket}/>
-                <p onClick={()=>{handleDelete(ticket._id);}} 
-                    style={{textAlign:'right'}}> <DeleteIcon/></p> */}
+            {ticket.status==="active" &&<Button variant='danger' onClick={()=>{handleCancelTicket(ticket._id);}}>Cancel Ticket</Button>}
+            {(ticket.status==="expired"|| ticket.status==="cancelled") && <p onClick={()=>{handleDeleteTicket(ticket._id);}} 
+                 style={{textAlign:'right'}}> <DeleteIcon/></p>}
             </div>
 ))  
         }
         </div>
 
     {orders.length===0 && <div style={{textAlign:'center',marginTop:'20px',color:"purple"}}><h2>No Orders Found</h2></div>}   
-        {orders.length>0 && <div style={{textAlign:'center',marginTop:'20px',color:"purple"}}><h2>Tickets </h2></div>}
-        <div className='Outer'>
-        {
-         orders.map((ticket)=>(
-            <div key={ticket._id} className="inner">
-            
-                {/* <Card data={ticket}/>
-                <p onClick={()=>{handleDelete(ticket._id);}} 
-                    style={{textAlign:'right'}}> <DeleteIcon/></p> */}
-            </div>
-         ))     
-        }
+        {orders.length>0 && <div style={{textAlign:'center',marginTop:'20px',color:"purple"}}><h2>Orders </h2></div>}
+        <div style={{width:"90%" ,marginLeft:"70px"}}>
+            <OrderTable data={orders}/>
         </div>
     </div>
     

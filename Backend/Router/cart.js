@@ -13,7 +13,11 @@ const CartEvents=await User.findById(userId).populate("Events").populate({path: 
     populate: [
       { path: 'event', select: 'title location' }, 
       { path: 'user', select: 'username' } ,
-    ]}).populate("getOrders").exec();
+    ]}).populate({path:"ordersPlaced",
+        populate: [
+            { path: 'event', select: 'title location' }, 
+            { path: 'user', select: 'username' } ,]
+    });
 if(!CartEvents){
     throw new ExpressError(404,"User's Event not found");
 }
@@ -47,8 +51,10 @@ if(!((event.owner.equals(user._id))||(user.Events.includes(eventId)))){
 const savedUser=await user.save();
 res.json({state:"success", message:"Successfully Added the Event with User"});
 }
+else{
 
     next( new ExpressError(403,"You are already added this event into your cart or You are the owner."));
+}
 }
 
     catch(err)
@@ -73,7 +79,7 @@ if(!user)
 }
 user.Events.pop(event);
 const savedUser=await user.save();
-res.json({state:"success", message:"Successfully delete the Event."});
+res.json({state:"success", message:"Successfully delete the Event.", user:savedUser});
     }
     catch(err)
     {

@@ -219,11 +219,10 @@ updateUser(response.data.user);
   }
   catch(err){
     const errorMsg=handleAxiosError(err);
-    console.log(errorMsg);
-  //   updateFlash({error:errorMsg});
-  //   setTimeout(()=>{  
-  //     updateFlash({error:""});
-  //   },4000);
+    updateFlash({error:"Internal Server Error"});
+    setTimeout(()=>{
+      updateFlash({error:''});
+    },4000);
   }
   reset();
 

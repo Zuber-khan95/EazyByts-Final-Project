@@ -3,7 +3,7 @@ const router=express.Router();
 import Event from '../Model/event.js'
 import Ticket from '../Model/ticket.js'
 import ExpressError from '../ExpressError.js';
-import {isLoggedIn,isOwner,isValidEvent} from '../middleware.js'
+import {isLoggedIn,isOwnerOfEvent} from '../middleware.js'
 import { eventSchema } from '../validate.js'
 import { upload } from '../cloudConfig.js'
 import {v2 as cloudinary} from 'cloudinary';
@@ -43,6 +43,7 @@ router.post("/new",isLoggedIn,upload.single("image"),async(req,res,next)=>{
 
     });
 
+    // To fetch specific event
     router.get("/:id",async(req,res,next)=>{
         let {id}=req.params;
         try{
@@ -52,17 +53,7 @@ router.post("/new",isLoggedIn,upload.single("image"),async(req,res,next)=>{
             }
             const tickets = await Ticket.find({ event: event._id });
 
-    const bookedSeats = {
-      diamond: [],
-      gold: [],
-      silver: []
-    };
-
-    tickets.forEach(ticket => {
-      ticket.seatNo.forEach(seat => {
-        bookedSeats[ticket.ticketType].push(seat);
-      });
-    });
+    const bookedSeats=event.bookedSeats;
             res.json({event,bookedSeats});
         }
         catch(err)
@@ -71,6 +62,8 @@ router.post("/new",isLoggedIn,upload.single("image"),async(req,res,next)=>{
             next(new ExpressError(500,"internal server error"));
         }
     });
+
+// to fetch all the event
 router.get("/",async(req,res,next)=>{
     try{
 const data= await Event.find({}).populate("owner");
@@ -88,8 +81,8 @@ res.json(data);
 });
 
 
-
-router.delete("/:id",isLoggedIn,isOwner,async(req,res,next)=>{
+// To delete the specific event
+router.delete("/:id",isLoggedIn,isOwnerOfEvent,async(req,res,next)=>{
     
     let {id}=req.params;
     try{

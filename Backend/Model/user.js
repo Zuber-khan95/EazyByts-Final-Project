@@ -15,7 +15,7 @@ const userSchema=mongoose.Schema({
     purchaseTickets:[{ type: mongoose.Schema.Types.ObjectId,
         ref: 'Ticket' 
     }],
-    getOrders:[{
+    ordersPlaced:[{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Ticket'
     }],

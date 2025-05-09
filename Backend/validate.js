@@ -1,7 +1,7 @@
 import Joi from 'joi'
 const eventSchema=Joi.object({
     title:Joi.string().min(3).max(30).required(),
-    description:Joi.string().min(10).max(50).required(),
+    description:Joi.string().min(10).max(100).required(),
     location:Joi.string().min(3).max(20).required(),
     price:{
        diamond: Joi.number().min(0).required(),
@@ -21,5 +21,17 @@ const eventSchema=Joi.object({
     imagePublicId:Joi.string().optional(),
 });
 
-export { eventSchema };
+const ticketSchema=Joi.object({
+    event: Joi.object({ObjectId:Joi.string()}).required(),
+    user: Joi.object({ObjectId:Joi.string()}).required(),
+ticketType:Joi.valid("diamond","gold","silver").required(),
+quantity:Joi.number().required(),
+seatNo:Joi.array().items(Joi.number()).required(),
+price:Joi.number().min(1).required(),
+status:Joi.valid("active","expired","cancelled"),
+date:Joi.date().required()
+
+});
+
+export { eventSchema , ticketSchema};
 

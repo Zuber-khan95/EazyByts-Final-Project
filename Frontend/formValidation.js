@@ -15,7 +15,7 @@ const eventSchema=Yup.object().shape({
     .max(30,"Title must have max 30 characters.")
     .required("Title is required"),
     description:Yup.string().min(10,"Description must have at least 10 characters.")
-    .max(50,"Description must have max 50 characters.")
+    .max(100,"Description must have max 100 characters.")
     .required("Description is required"),
     location:Yup.string().min(3,"Location must have at least 3 characters.")
     .max(20,"Location must have max 20 characters.")
@@ -72,7 +72,7 @@ const ticketSchema = Yup.object().shape({
     ticketDate: Yup.date()
     .required("Date is required")
     .min(
-      new Date(new Date().setHours(0, 0, 0, 0)),
+      new Date(new Date().setHours(23, 59, 0, 0)),
       "Event cannot be booked in the past"
     )
   ,
